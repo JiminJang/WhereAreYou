@@ -1,9 +1,12 @@
 package com.example.admin.wru;
 
 import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 //import android.support.v7.app.AlertDialog;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.util.Log;
@@ -12,6 +15,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONObject;
 
@@ -23,16 +33,89 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 
 
-
-public class CreateMoim extends AppCompatActivity {
+public class CreateMoim extends FragmentActivity implements OnMapReadyCallback {
     TextView tv;
+
+    private GoogleMap mMap;
+    private Geocoder geocoder;
+
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap=googleMap;
+        geocoder=new Geocoder(this);
+
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng point) {
+                MarkerOptions markerOptions=new MarkerOptions();
+                markerOptions.title("ㅁㅏ커 좌표");
+                Double latitude=point.latitude;
+                Double longitude =point.longitude;
+                markerOptions.snippet(latitude.toString()+","+longitude.toString());
+                markerOptions.position((new LatLng(latitude,longitude)));
+
+                googleMap.addMarker(markerOptions);
+            }
+        });
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.createmoimform);
+
+
+        tv=(TextView)findViewById(R.id.textView);
+
+        EditText et1 = (EditText) findViewById(R.id.moimname);
+        EditText et2=(EditText)findViewById(R.id.numofppl);
+        EditText et3 = (EditText) findViewById(R.id.moimtime);
+        EditText et4=(EditText)findViewById(R.id.moimpw);
+        EditText et5=(EditText)findViewById(R.id.moimrepw);
+        Button location_button=(Button)findViewById(R.id.location_button);
+        SupportMapFragment mapFragment=(SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+//        location_button.setOnClickListener(new Button.OnClickListener(){
+//            @Override
+//            public void onClick(View view) {
+//                EditText et6=(EditText)findViewById(R.id.moimlocation);
+//
+//                String moimlocation=et6.getText().toString();
+//                List<Address> addressList=null;
+//                try{
+//                    addressList=geocoder.getFromLocationName(
+//                            moimlocation,10);
+//
+//                }catch (IOException e){
+//                    e.printStackTrace();
+//                }
+//
+//                String []splitStr=addressList.get(0).toString().split(",");
+//                String address=splitStr[0].substring(splitStr[0].indexOf("\"")+1,splitStr[0].length()-2);
+//
+//                String latitude=splitStr[10].substring(splitStr[10].indexOf("=")+1);
+//                String longitude=splitStr[12].substring(splitStr[12].indexOf("=")+1);
+//
+//                LatLng point =new LatLng(Double.parseDouble(latitude),Double.parseDouble((longitude)));
+//
+//                MarkerOptions markerOptions2=new MarkerOptions();
+//                markerOptions2.title("search result");
+//                markerOptions2.snippet(address);
+//                markerOptions2.position(point);
+//
+//                mMap.addMarker(markerOptions2);
+//                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(point,15));
+//
+//            }
+//        });
+//        LatLng sydney = new LatLng(-34, 151);
+//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
 
 
@@ -42,20 +125,15 @@ public class CreateMoim extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                tv=(TextView)findViewById(R.id.textView);
-
-                EditText et1 = (EditText) findViewById(R.id.moimname);
-                EditText et2=(EditText)findViewById(R.id.numofppl);
-                EditText et3 = (EditText) findViewById(R.id.moimtime);
-                EditText et4=(EditText)findViewById(R.id.moimpw);
-                EditText et5=(EditText)findViewById(R.id.moimrepw);
                 EditText et6=(EditText)findViewById(R.id.moimlocation);
+
                 String moimname = et1.getText().toString();
                 Integer numofppl=Integer.parseInt(et2.getText().toString());
                 String moimtime = et3.getText().toString();
                 String moimpw=et4.getText().toString();
                 String moimrepw=et5.getText().toString();
                 String moimlocation=et6.getText().toString();
+
 
                 if(!moimpw.equals(moimrepw)){
                     AlertDialog.Builder alert_confirm=new AlertDialog.Builder(CreateMoim.this);
@@ -68,10 +146,17 @@ public class CreateMoim extends AppCompatActivity {
 
 
                 Toast.makeText(getApplicationContext(), moimtime + moimname, Toast.LENGTH_LONG).show();
-                new JSONTask().execute("http://192.168.0.129:3000",moimname,numofppl.toString(),moimtime,moimpw,moimlocation);}
+                new JSONTask().execute("http://172.30.58.173:3000",moimname,numofppl.toString(),moimtime,moimpw,moimlocation);}
 
             }
-        });
+        }
+
+        );
+
+
+
+
+
     }
 
     public class JSONTask extends AsyncTask<String, String, String> {

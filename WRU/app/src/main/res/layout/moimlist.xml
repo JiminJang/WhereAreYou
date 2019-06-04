@@ -9,7 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="방 이름을 검색해보세요."
-        android:textAlignment="center"/>
+        android:textAlignment="center"
+        android:id="@+id/search_page_title"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,9 +25,14 @@
             android:layout_width="wrap_content"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:id="@+id/button"
+            android:id="@+id/search_button"
             android:text="검색"/>
 
     </LinearLayout>
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/listview">
+    </ListView>
 
 </LinearLayout>

@@ -20,20 +20,20 @@ public class JSONTask extends AsyncTask<String, String, String> {
 
         try {
 
-//            JSONObject jsonObject = new JSONObject();
-//            String moimname=args[1];
-//            String numofppl=args[2];
-//            String moimtime=args[3];
-//            String moimpw=args[4];
-//            String moimlocation=args[5];
-//
-//            jsonObject.put("moimname",moimname);
-//            jsonObject.put("numofppl",Integer.parseInt(numofppl));
-//            jsonObject.put("moimtime", moimtime);
-//            jsonObject.put("moimpw",moimpw);
-//            jsonObject.put("moimlocation",moimlocation);
-//
-//            Log.i(this.getClass().getName(),jsonObject.getString("moimname"));
+            JSONObject jsonObject = new JSONObject();
+            String moimname=args[1];
+            String numofppl=args[2];
+            String moimtime=args[3];
+            String moimpw=args[4];
+            String moimlocation=args[5];
+
+            jsonObject.put("moimname",moimname);
+            jsonObject.put("numofppl",Integer.parseInt(numofppl));
+            jsonObject.put("moimtime", moimtime);
+            jsonObject.put("moimpw",moimpw);
+            jsonObject.put("moimlocation",moimlocation);
+
+            Log.i(this.getClass().getName(),jsonObject.getString("moimname"));
 
 
             HttpURLConnection con = null;
