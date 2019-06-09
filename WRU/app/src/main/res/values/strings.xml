@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">WRU</string>
+    <string name="mapsearchtxt">"Enter address"</string>
+    <string name="mapsearchbtn">"검색"</string>
 </resources>

@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -52,13 +57,21 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="날짜 및 시간"
+                android:layout_weight="40"/>
+            <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="약속시간"/>
-            <EditText
-                android:layout_width="match_parent"
+                android:inputType="datetime"
+                android:id="@+id/timeAndDate"/>
+            <Button
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/moimtime"/>
+                android:text="날짜와 시간 입력"
+                android:layout_weight="40"
+                android:id="@+id/btn_timeAndDate"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -70,25 +83,16 @@
                 android:text="약속장소"
                 android:layout_weight="40"/>
             <EditText
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/moimlocation"
-                android:layout_weight="40"/>
+                android:id="@+id/moimlocation"/>
             <Button
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/location_button"
-                android:text="검색"
-                android:layout_weight="10"/>
+                android:id="@+id/btn_location"
+                android:text="장소검색"
+                android:layout_weight="40"/>
         </LinearLayout>
-        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:map="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            tools:context="com.example.admin.wru.CreateMoim"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -126,3 +130,4 @@
 
 
 </LinearLayout>
+</ScrollView>

@@ -1,12 +1,12 @@
 package com.example.admin.wru;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
-//import android.support.v7.app.AlertDialog;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.util.Log;
@@ -16,12 +16,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONObject;
 
@@ -33,36 +27,17 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
-public class CreateMoim extends FragmentActivity implements OnMapReadyCallback {
+public class CreateMoim extends AppCompatActivity  {
     TextView tv;
+    EditText et_moimlocation;
+    EditText et_timeAndDate;
 
-    private GoogleMap mMap;
-    private Geocoder geocoder;
 
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap=googleMap;
-        geocoder=new Geocoder(this);
-
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng point) {
-                MarkerOptions markerOptions=new MarkerOptions();
-                markerOptions.title("ㅁㅏ커 좌표");
-                Double latitude=point.latitude;
-                Double longitude =point.longitude;
-                markerOptions.snippet(latitude.toString()+","+longitude.toString());
-                markerOptions.position((new LatLng(latitude,longitude)));
-
-                googleMap.addMarker(markerOptions);
-            }
-        });
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,50 +47,34 @@ public class CreateMoim extends FragmentActivity implements OnMapReadyCallback {
 
         tv=(TextView)findViewById(R.id.textView);
 
-        EditText et1 = (EditText) findViewById(R.id.moimname);
-        EditText et2=(EditText)findViewById(R.id.numofppl);
-        EditText et3 = (EditText) findViewById(R.id.moimtime);
-        EditText et4=(EditText)findViewById(R.id.moimpw);
-        EditText et5=(EditText)findViewById(R.id.moimrepw);
-        Button location_button=(Button)findViewById(R.id.location_button);
-        SupportMapFragment mapFragment=(SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-//        location_button.setOnClickListener(new Button.OnClickListener(){
-//            @Override
-//            public void onClick(View view) {
-//                EditText et6=(EditText)findViewById(R.id.moimlocation);
-//
-//                String moimlocation=et6.getText().toString();
-//                List<Address> addressList=null;
-//                try{
-//                    addressList=geocoder.getFromLocationName(
-//                            moimlocation,10);
-//
-//                }catch (IOException e){
-//                    e.printStackTrace();
-//                }
-//
-//                String []splitStr=addressList.get(0).toString().split(",");
-//                String address=splitStr[0].substring(splitStr[0].indexOf("\"")+1,splitStr[0].length()-2);
-//
-//                String latitude=splitStr[10].substring(splitStr[10].indexOf("=")+1);
-//                String longitude=splitStr[12].substring(splitStr[12].indexOf("=")+1);
-//
-//                LatLng point =new LatLng(Double.parseDouble(latitude),Double.parseDouble((longitude)));
-//
-//                MarkerOptions markerOptions2=new MarkerOptions();
-//                markerOptions2.title("search result");
-//                markerOptions2.snippet(address);
-//                markerOptions2.position(point);
-//
-//                mMap.addMarker(markerOptions2);
-//                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(point,15));
-//
-//            }
-//        });
-//        LatLng sydney = new LatLng(-34, 151);
-//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        EditText et_moimname = (EditText) findViewById(R.id.moimname);
+        EditText et_numofppl=(EditText)findViewById(R.id.numofppl);
+        EditText et_moimpw=(EditText)findViewById(R.id.moimpw);
+        EditText et_moimrepw=(EditText)findViewById(R.id.moimrepw);
+        et_moimlocation=(EditText)findViewById(R.id.moimlocation);
+        et_timeAndDate=(EditText)findViewById(R.id.timeAndDate);
+
+        Button btn_timeAndDate=(Button)findViewById(R.id.btn_timeAndDate);
+        btn_timeAndDate.setOnClickListener(new Button.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getApplicationContext(),TimeAndDate.class);
+                startActivityForResult(intent,1);
+
+            }
+        });
+
+
+        Button btn_location=(Button)findViewById(R.id.btn_location);
+        btn_location.setOnClickListener(new Button.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getApplicationContext(),SearchMap.class);
+                startActivityForResult(intent,3000);
+
+
+            }
+        });
 
 
 
@@ -123,41 +82,60 @@ public class CreateMoim extends FragmentActivity implements OnMapReadyCallback {
 
         btn.setOnClickListener(new Button.OnClickListener() {
 
-            @Override
-            public void onClick(View view) {
-                EditText et6=(EditText)findViewById(R.id.moimlocation);
+                                   @Override
+                                   public void onClick(View view) {
+                                       if (et_moimname.getText().toString().equals("") || et_numofppl.getText().toString().equals("")
+                                               || et_moimpw.getText().toString().equals("") ||
+                                               et_moimrepw.getText().toString().equals("") || et_moimlocation.getText().toString().equals(""))
+                                           Toast.makeText(getApplicationContext(), "모든 항목을 입력해주세요.", Toast.LENGTH_LONG).show();
+                                       else {
 
-                String moimname = et1.getText().toString();
-                Integer numofppl=Integer.parseInt(et2.getText().toString());
-                String moimtime = et3.getText().toString();
-                String moimpw=et4.getText().toString();
-                String moimrepw=et5.getText().toString();
-                String moimlocation=et6.getText().toString();
+                                           String moimname = et_moimname.getText().toString();
+                                           Integer numofppl = Integer.parseInt(et_numofppl.getText().toString());
+                                           String moimpw = et_moimpw.getText().toString();
+                                           String moimrepw = et_moimrepw.getText().toString();
+                                           String moimlocation = et_moimlocation.getText().toString();
+                                           String moimtime=et_timeAndDate.getText().toString();
+
+                                           if (!moimpw.equals(moimrepw)) {
+                                               AlertDialog.Builder alert_confirm = new AlertDialog.Builder(CreateMoim.this);
+                                               alert_confirm.setMessage("비밀번호가 일치하지 않습니다.");
+                                               alert_confirm.setPositiveButton("확인", null);
+                                               AlertDialog alert = alert_confirm.create();
+                                               alert.show();
+                                           } else {
 
 
-                if(!moimpw.equals(moimrepw)){
-                    AlertDialog.Builder alert_confirm=new AlertDialog.Builder(CreateMoim.this);
-                    alert_confirm.setMessage("비밀번호가 일치하지 않습니다.");
-                    alert_confirm.setPositiveButton("확인",null);
-                    AlertDialog alert=alert_confirm.create();
-                    alert.show();
-                }
-                else{
+                    new JSONTask().execute("http://172.30.1.35:3000",moimname,numofppl.toString(),moimlocation,moimtime,moimpw);
+                                           Intent intent=new Intent(getApplicationContext(),MainActivity.class);
+                                           startActivity(intent);}
 
 
-                Toast.makeText(getApplicationContext(), moimtime + moimname, Toast.LENGTH_LONG).show();
-                new JSONTask().execute("http://172.30.58.173:3000",moimname,numofppl.toString(),moimtime,moimpw,moimlocation);}
+                                           }
+                                       }
+                                   }
 
-            }
-        }
 
         );
 
-
-
-
-
     }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode==RESULT_OK){
+            switch (requestCode){
+                case 3000:
+                    et_moimlocation.setText(data.getStringExtra("result"));
+                    break;
+                case 1:
+                    et_timeAndDate.setText(data.getStringExtra("timeAndDate"));
+                    break;
+
+            }
+        }
+    }
+
 
     public class JSONTask extends AsyncTask<String, String, String> {
         @Override
@@ -168,9 +146,9 @@ public class CreateMoim extends FragmentActivity implements OnMapReadyCallback {
                 JSONObject jsonObject = new JSONObject();
                 String moimname=args[1];
                 String numofppl=args[2];
-                String moimtime=args[3];
-                String moimpw=args[4];
-                String moimlocation=args[5];
+                String moimlocation=args[3];
+                String moimtime=args[4];
+                String moimpw=args[5];
 
                 jsonObject.put("moimname",moimname);
                 jsonObject.put("numofppl",Integer.parseInt(numofppl));
@@ -249,6 +227,7 @@ public class CreateMoim extends FragmentActivity implements OnMapReadyCallback {
             }
 
             return null;
+
         }
 
         @Override

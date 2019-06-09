@@ -1,5 +1,6 @@
 package com.example.admin.wru;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -38,13 +39,13 @@ public class MoimList extends AppCompatActivity {
 
         tv=(TextView)findViewById(R.id.search_page_title);
         try{
-            new JSONTask2().execute("http://10.50.119.193:3000/moimlist","a");
+            new JSONTask2().execute("http://172.30.1.35:3000/moimlist","a");
 
         }catch(Exception e){
             e.printStackTrace();
         }
-        Button b=(Button)findViewById(R.id.search_button);
-        b.setOnClickListener(new Button.OnClickListener(){
+        Button search_button=(Button)findViewById(R.id.search_button);
+        search_button.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View view) {
                 EditText search_moim_et=(EditText)findViewById(R.id.search_moim);
@@ -53,7 +54,7 @@ public class MoimList extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),"name:"+search_moim,Toast.LENGTH_LONG).show();
                 try{
 
-                    new JSONTask2().execute("http://10.50.119.193:3000/searchmoim_page",search_moim);
+                    new JSONTask2().execute("http://172.30.1.35:3000/searchmoim_page",search_moim);
 
                 }
                 catch (Exception e){
@@ -63,7 +64,6 @@ public class MoimList extends AppCompatActivity {
 
             }
         });
-
 
     }
     public class JSONTask2 extends AsyncTask<String, String, JSONArray> {

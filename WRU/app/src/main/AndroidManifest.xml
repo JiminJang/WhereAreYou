@@ -16,6 +16,7 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW"/>
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
@@ -23,6 +24,9 @@
         <activity android:name=".CreateMoim"
             android:theme="@style/Theme.AppCompat"></activity>
         <activity android:name=".MoimList"></activity>
+        <activity android:name=".MoimView"></activity>
+        <activity android:name=".SearchMap"></activity>
+        <activity android:name=".TimeAndDate"></activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

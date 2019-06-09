@@ -9,22 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.json.JSONObject;
-import org.w3c.dom.Text;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-
 
 public class MainActivity extends AppCompatActivity {
     TextView tv;
@@ -49,6 +33,16 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent2=new Intent(
                         getApplicationContext(),MoimList.class);
                 startActivity(intent2);
+
+            }
+        });
+        Button b3=(Button)findViewById(R.id.moimview);
+        b3.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent3=new Intent(
+                        getApplicationContext(),MoimView.class);
+                startActivity(intent3);
 
             }
         });
